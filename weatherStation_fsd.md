@@ -1,100 +1,100 @@
-# Funktionale Spezifikation: ESP32 Wetterstation
+# Functional Specification: ESP32 Weather Station
 
-## 1. Einleitung
+## 1. Introduction
 
-### 1.1 Zweck des Dokuments
-Dieses Dokument beschreibt die funktionalen und nicht-funktionalen Anforderungen an die ESP32 Wetterstation. Es dient als Referenz für die Entwicklung, Validierung und zukünftige Erweiterungen des Systems.
+### 1.1 Purpose of the Document
+This document describes the functional and non-functional requirements for the ESP32 Weather Station. It serves as a reference for development, validation, and future expansions of the system.
 
-### 1.2 Umfang
-Die Spezifikation deckt die Datenerfassung von Temperatur, Luftfeuchtigkeit und Luftdruck mittels eines BME280-Sensors, die Anzeige dieser Daten auf einem SSD1306 OLED-Display sowie die zugrundeliegende Software-Architektur basierend auf FreeRTOS ab.
+### 1.2 Scope
+The specification covers data acquisition of temperature, humidity, and atmospheric pressure using a BME280 sensor, the display of this data on an SSD1306 OLED display, and the underlying software architecture based on FreeRTOS.
 
-### 1.3 Zielgruppe
-Dieses Dokument richtet sich an Entwickler, Tester und alle Interessenten, die ein tiefgreifendes Verständnis der Wetterstation erlangen möchten.
+### 1.3 Target Audience
+This document is intended for developers, testers, and anyone interested in gaining a deep understanding of the weather station.
 
-## 2. Produktübersicht
+## 2. Product Overview
 
-### 2.1 Kurze Beschreibung
-Die ESP32 Wetterstation ist ein autonomes Gerät, das kontinuierlich Umweltdaten (Temperatur, Luftfeuchtigkeit, Luftdruck) erfasst und diese in Echtzeit auf einem kleinen OLED-Bildschirm anzeigt. Das System ist robust, energieeffizient und nutzt die Vorteile eines Echtzeitbetriebssystems (FreeRTOS) für eine zuverlässige und reaktionsschnelle Leistung.
+### 2.1 Brief Description
+The ESP32 Weather Station is an autonomous device that continuously collects environmental data (temperature, humidity, atmospheric pressure) and displays it in real-time on a small OLED screen. The system is robust, energy-efficient, and leverages the advantages of a real-time operating system (FreeRTOS) for reliable and responsive performance.
 
-### 2.2 Ziele und Vision
-Das Hauptziel ist die Bereitstellung einer einfach zu bauenden und zu verwendenden Wetterstation, die präzise Messwerte liefert und als Basis für weiterführende IoT-Projekte dienen kann.
+### 2.2 Goals and Vision
+The primary goal is to provide an easy-to-build and easy-to-use weather station that delivers precise measurements and serves as a basis for further IoT projects.
 
-## 3. Funktionale Anforderungen
+## 3. Functional Requirements
 
-### 3.1 Sensordatenerfassung
-*   **FR-1.1:** Das System MUSS Temperaturmesswerte vom BME280-Sensor erfassen.
-*   **FR-1.2:** Das System MUSS Luftfeuchtigkeitsmesswerte vom BME280-Sensor erfassen.
-*   **FR-1.3:** Das System MUSS Luftdruckmesswerte vom BME280-Sensor erfassen.
-*   **FR-1.4:** Die Sensordaten MÜSSEN mindestens alle 2 Sekunden aktualisiert werden.
-*   **FR-1.5:** Das System MUSS die Möglichkeit bieten, den I2C-Bus zwischen verschiedenen Tasks sicher zu synchronisieren.
+### 3.1 Sensor Data Acquisition
+*   **FR-1.1:** The system MUST collect temperature readings from the BME280 sensor.
+*   **FR-1.2:** The system MUST collect humidity readings from the BME280 sensor.
+*   **FR-1.3:** The system MUST collect atmospheric pressure readings from the BME280 sensor.
+*   **FR-1.4:** Sensor data MUST be updated at least every 2 seconds.
+*   **FR-1.5:** The system MUST provide a way to safely synchronize the I2C bus between different tasks.
 
-### 3.2 Datenanzeige auf OLED
-*   **FR-2.1:** Das System MUSS die aktuelle Temperatur auf dem SSD1306 OLED-Display anzeigen.
-*   **FR-2.2:** Das System MUSS die aktuelle Luftfeuchtigkeit auf dem SSD1306 OLED-Display anzeigen.
-*   **FR-2.3:** Das System MUSS den aktuellen Luftdruck auf dem SSD1306 OLED-Display anzeigen.
-*   **FR-2.4:** Die Anzeige auf dem OLED-Display MUSS mindestens alle 1 Sekunde aktualisiert werden.
-*   **FR-2.5:** Die Anzeigewerte MÜSSEN klar lesbar sein und die entsprechenden Einheiten (z.B. °C, %RH, hPa) enthalten.
+### 3.2 Data Display on OLED
+*   **FR-2.1:** The system MUST display the current temperature on the SSD1306 OLED display.
+*   **FR-2.2:** The system MUST display the current humidity on the SSD1306 OLED display.
+*   **FR-2.3:** The system MUST display the current atmospheric pressure on the SSD1306 OLED display.
+*   **FR-2.4:** The OLED display MUST be updated at least every 1 second.
+*   **FR-2.5:** The displayed values MUST be clearly legible and include the corresponding units (e.g., °C, %RH, hPa).
 
-### 3.3 Konfiguration
-*   **FR-3.1:** Konfigurationsparameter wie Display-Dimensionen, I2C-Adressen der Sensoren und Displays sowie Seedruckhöhe MÜSSEN in einer dedizierten Header-Datei (`config.h`) zentral definiert sein.
+### 3.3 Configuration
+*   **FR-3.1:** Configuration parameters such as display dimensions, I2C addresses of sensors and displays, and sea-level pressure MUST be centrally defined in a dedicated header file (`config.h`).
 
-### 3.4 Fehlerbehandlung
-*   **FR-4.1:** Das System MUSS eine Fehlermeldung auf der seriellen Konsole ausgeben, wenn das OLED-Display nicht initialisiert werden kann.
-*   **FR-4.2:** Das System MUSS eine Fehlermeldung auf der seriellen Konsole ausgeben, wenn der BME280-Sensor nicht initialisiert werden kann.
-*   **FR-4.3:** Bei einem kritischen Initialisierungsfehler (Display oder Sensor) MUSS das System in einem Fehlermodus verbleiben oder den Betrieb einstellen.
+### 3.4 Error Handling
+*   **FR-4.1:** The system MUST output an error message to the serial console if the OLED display cannot be initialized.
+*   **FR-4.2:** The system MUST output an error message to the serial console if the BME280 sensor cannot be initialized.
+*   **FR-4.3:** In the event of a critical initialization error (display or sensor), the system MUST remain in an error mode or cease operation.
 
-## 4. Nicht-funktionale Anforderungen
+## 4. Non-Functional Requirements
 
-### 4.1 Leistung
-*   **NFR-1.1:** Die Sensordatenerfassung und die Displayaktualisierung MÜSSEN parallel und ohne spürbare Verzögerung erfolgen.
-*   **NFR-1.2:** Die Verwendung von FreeRTOS MUSS eine effiziente Ressourcenverwaltung gewährleisten.
+### 4.1 Performance
+*   **NFR-1.1:** Sensor data acquisition and display updates MUST occur in parallel and without noticeable delay.
+*   **NFR-1.2:** The use of FreeRTOS MUST ensure efficient resource management.
 
-### 4.2 Zuverlässigkeit
-*   **NFR-2.1:** Das System MUSS unterbrechungsfrei über längere Zeiträume (Wochen/Monate) funktionieren.
-*   **NFR-2.2:** I2C-Kommunikationsfehler SOLLTEN robust behandelt werden, um Systemabstürze zu vermeiden.
+### 4.2 Reliability
+*   **NFR-2.1:** The system MUST operate without interruption over long periods (weeks/months).
+*   **NFR-2.2:** I2C communication errors SHOULD be handled robustly to avoid system crashes.
 
-### 4.3 Wartbarkeit
-*   **NFR-3.1:** Der Code MUSS modular und leicht verständlich sein, unterteilt in logische Header-Dateien.
-*   **NFR-3.2:** Die Konfiguration des Systems MUSS einfach durch Anpassung von `config.h` möglich sein.
+### 4.3 Maintainability
+*   **NFR-3.1:** The code MUST be modular and easy to understand, divided into logical header files.
+*   **NFR-3.2:** System configuration MUST be easily adjustable by modifying `config.h`.
 
-### 4.4 Sicherheit (Physisch)
-*   **NFR-4.1:** Das System SOLLTE in einem Gehäuse untergebracht werden, um die Elektronik vor Umwelteinflüssen zu schützen (extern, nicht Teil dieser Spezifikation).
+### 4.4 Safety (Physical)
+*   **NFR-4.1:** The system SHOULD be housed in an enclosure to protect the electronics from environmental influences (external, not part of this specification).
 
-### 4.5 Benutzerfreundlichkeit (Anzeige)
-*   **NFR-5.1:** Die angezeigten Informationen MÜSSEN auf einen Blick erfassbar sein.
+### 4.5 Usability (Display)
+*   **NFR-5.1:** The displayed information MUST be understandable at a glance.
 
-## 5. Technische Architektur (Kurz)
+## 5. Technical Architecture (Brief)
 
-### 5.1 Hardware-Komponenten
-*   **Mikrocontroller:** ESP32 (ESP32 Dev Module)
-*   **Sensor:** BME280 (Temperatur, Luftfeuchtigkeit, Druck)
-*   **Display:** SSD1306 OLED (I2C, 128x64 Pixel)
+### 5.1 Hardware Components
+*   **Microcontroller:** ESP32 (ESP32 Dev Module)
+*   **Sensor:** BME280 (Temperature, Humidity, Pressure)
+*   **Display:** SSD1306 OLED (I2C, 128x64 pixels)
 
-### 5.2 Software-Komponenten
-*   **Echtzeitbetriebssystem:** FreeRTOS
-*   **Programmiersprache:** C++ (Arduino-Framework)
-*   **Bibliotheken:**
-    *   `Wire.h` (I2C-Kommunikation)
-    *   `Adafruit_GFX.h` (Grafikbibliothek für Displays)
-    *   `Adafruit_SSD1306.h` (Treiber für SSD1306 OLED)
-    *   `Adafruit_BME280.h` (Treiber für BME280-Sensor)
+### 5.2 Software Components
+*   **Real-Time Operating System:** FreeRTOS
+*   **Programming Language:** C++ (Arduino Framework)
+*   **Libraries:**
+    *   `Wire.h` (I2C communication)
+    *   `Adafruit_GFX.h` (Graphics library for displays)
+    *   `Adafruit_SSD1306.h` (Driver for SSD1306 OLED)
+    *   `Adafruit_BME280.h` (Driver for BME280 sensor)
 
-## 6. Schnittstellen
+## 6. Interfaces
 
-### 6.1 Benutzeroberfläche (OLED)
-*   Anzeige von Temperatur, Luftfeuchtigkeit und Luftdruck.
+### 6.1 User Interface (OLED)
+*   Display of temperature, humidity, and atmospheric pressure.
 
-### 6.2 Hardware-Schnittstellen
-*   **I2C-Bus:** Verwendung von GPIO 21 (SDA) und GPIO 22 (SCL) des ESP32.
-*   **Spannungsversorgung:** 3.3V für ESP32, BME280 und SSD1306.
+### 6.2 Hardware Interfaces
+*   **I2C Bus:** Use of GPIO 21 (SDA) and GPIO 22 (SCL) on the ESP32.
+*   **Power Supply:** 3.3V for ESP32, BME280, and SSD1306.
 
-### 6.3 Serielle Schnittstelle
-*   Verwendung der seriellen Schnittstelle für Debugging-Ausgaben bei 115200 Baud.
+### 6.3 Serial Interface
+*   Use of the serial interface for debugging output at 115200 baud.
 
-## 7. Offene Punkte / Zukünftige Erweiterungen
+## 7. Open Points / Future Expansions
 
-*   **WLAN-Anbindung:** Integration einer Funktion zur Übertragung der Wetterdaten an einen Server oder Cloud-Dienst.
-*   **Datenlogging:** Speicherung der historischen Wetterdaten auf einer SD-Karte oder im internen Flash-Speicher des ESP32.
-*   **Webserver:** Implementierung eines einfachen Webservers auf dem ESP32 zur Anzeige der Daten im lokalen Netzwerk.
-*   **Kalibrierung:** Möglichkeit zur Kalibrierung der Sensordaten.
-*   **Uhrzeit:** Integration einer Echtzeituhr (RTC) zur Zeitstempelung der Daten.
+*   **WLAN Connection:** Integration of a function to transmit weather data to a server or cloud service.
+*   **Data Logging:** Storage of historical weather data on an SD card or in the internal flash memory of the ESP32.
+*   **Web Server:** Implementation of a simple web server on the ESP32 to display data in the local network.
+*   **Calibration:** Possibility to calibrate sensor data.
+*   **Time:** Integration of a real-time clock (RTC) for timestamping data.
